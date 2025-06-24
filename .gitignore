@@ -1,0 +1,39 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# VSCode settings
+.vscode/
+
+# Mac OS metadata
+.DS_Store
+
+# Windows metadata
+Thumbs.db
+
+# Optional: Ignore coverage reports
+coverage/
+
+# Optional: Ignore IDE-specific folders
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Optional: Ignore test output
+jest-test-results.json
