@@ -12,7 +12,7 @@ export class LivroDAO {
       [id, titulo, autor, descricao ?? null, ano ?? null]
     );
 
-    return { id, titulo, autor, descricao, ano };
+    return Livro.assemble({ id, titulo, autor, descricao, ano });
   }
 
   async buscarPorId(id: string): Promise<Livro | null> {
@@ -49,7 +49,7 @@ export class LivroDAO {
       [titulo, autor, descricao, ano, id]
     );
 
-    return { id, titulo, autor, descricao, ano };
+    return Livro.assemble({ id, titulo, autor, descricao, ano });
   }
 
   async deletarLivro(id: string): Promise<boolean> {

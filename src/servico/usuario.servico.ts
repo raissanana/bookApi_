@@ -7,7 +7,7 @@ const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || '123';
 
 export class UsuarioServico {
-  private usuarioDAO = new UsuarioDAO();
+  constructor(private usuarioDAO: UsuarioDAO) {}
 
   async cadastrar(nome: string, email: string, senha: string): Promise<Omit<Usuario, 'senha_hash'>> {
     try {
@@ -17,10 +17,8 @@ export class UsuarioServico {
       const senha_hash = await bcrypt.hash(senha, SALT_ROUNDS);
       const usuario = await this.usuarioDAO.criarUsuario(nome, email, senha_hash);
 
-      // Retornando sem senha_hash para segurança
-      const { senha_hash: _, ...usuarioSemSenha } = usuario;
+      const { senha_hash: _, ...resto } = usuario as any;
       return { id: usuario.id, nome: usuario.nome, email: usuario.email };
-
     } catch (error: any) {
       throw new Error(error.message || 'Erro ao cadastrar usuário');
     }

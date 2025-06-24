@@ -9,7 +9,7 @@ export type LivroProps = {
 export class Livro {
   private constructor(private readonly props: LivroProps) {}
 
-  public static build({ titulo, autor, descricao, ano }: Omit<LivroProps, 'id'>) {
+  public static build({ titulo, autor, descricao, ano }: Omit<LivroProps, 'id'>): Livro {
     return new Livro({
       id: crypto.randomUUID().toString(),
       titulo,
@@ -23,23 +23,23 @@ export class Livro {
     return new Livro(props);
   }
 
-  public get id() {
+  public get id(): string {
     return this.props.id;
   }
 
-  public get titulo() {
+  public get titulo(): string {
     return this.props.titulo;
   }
 
-  public get autor() {
+  public get autor(): string {
     return this.props.autor;
   }
 
-  public get descricao() {
+  public get descricao(): string | undefined {
     return this.props.descricao;
   }
 
-  public get ano() {
+  public get ano(): number | undefined {
     return this.props.ano;
   }
 }

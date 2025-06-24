@@ -1,7 +1,6 @@
 import { AvaliacaoDAO } from '../dao/avaliacao.dao';
 import { AvaliacaoCreateDTO } from '../dto/avaliacao.dto';
 import { Avaliacao } from '../modelo/avaliacao';
-import { v4 as uuidv4 } from 'uuid';
 
 export class AvaliacaoServico {
   private avaliacaoDAO: AvaliacaoDAO;
@@ -12,29 +11,18 @@ export class AvaliacaoServico {
 
   async criarAvaliacao(dados: AvaliacaoCreateDTO): Promise<Avaliacao> {
     try {
-      const novaAvaliacao: Avaliacao = {
-        id: uuidv4(),
-        livro_id: dados.livro_id,
-        usuario_id: dados.usuario_id,
-        nota: dados.nota,
-        comentario: dados.comentario ?? undefined,
-        criado: new Date(),
-      };
-
-      await this.avaliacaoDAO.criar(novaAvaliacao);
-      return novaAvaliacao;
+      return await this.avaliacaoDAO.criar(dados);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message);
+        throw new Error(error.message); // já propaga a mensagem "Livro não encontrado"
       }
-      throw new Error('Erro ao criar avaliação');
+      throw new Error('Erro inesperado ao criar avaliação');
     }
   }
 
   async calcularMediaNotas(livroId: string): Promise<number> {
     try {
-      const media = await this.avaliacaoDAO.calcularMedia(livroId);
-      return Number(media);
+      return await this.avaliacaoDAO.calcularMedia(livroId);
     } catch (error: unknown) {
       throw new Error('Erro ao calcular média de notas');
     }
@@ -42,8 +30,7 @@ export class AvaliacaoServico {
 
   async listarAvaliacoesPorLivro(livroId: string): Promise<Avaliacao[]> {
     try {
-      const avaliacoes = await this.avaliacaoDAO.listarPorLivro(livroId);
-      return avaliacoes ?? []; // evita erro de null
+      return await this.avaliacaoDAO.listarPorLivro(livroId);
     } catch (error: unknown) {
       throw new Error('Erro ao listar avaliações do livro');
     }

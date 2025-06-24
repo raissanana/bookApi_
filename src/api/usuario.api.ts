@@ -7,7 +7,9 @@ export class UsuarioApi {
   readonly usuarioControle: UsuarioControle;
 
   private constructor(readonly api: Api) {
-    this.usuarioControle = new UsuarioControle(new UsuarioServico(new UsuarioDAO()));
+    const usuarioDAO = new UsuarioDAO();
+    const usuarioServico = new UsuarioServico(usuarioDAO);
+    this.usuarioControle = new UsuarioControle(usuarioServico);
   }
 
   public static build(api: Api): void {

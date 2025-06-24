@@ -3,21 +3,26 @@ export type AvaliacaoProps = {
   livro_id: string;
   usuario_id: string;
   nota: number;
-  comentario?: string; 
-  criadoEm: Date;
+  comentario?: string;
+  data: Date;
 };
 
 export class Avaliacao {
   private constructor(private readonly props: AvaliacaoProps) {}
 
-  public static build({ livro_id, usuario_id, nota, comentario }: Omit<AvaliacaoProps, 'id' | 'data'>) {
+  public static build({
+    livro_id,
+    usuario_id,
+    nota,
+    comentario,
+  }: Omit<AvaliacaoProps, 'id' | 'data'>): Avaliacao {
     return new Avaliacao({
-      id: crypto.randomUUID().toString(),
+      id: crypto.randomUUID(),
       livro_id,
       usuario_id,
       nota,
-      comentario, // ← aqui
-      criadoEm: new Date(),
+      comentario,
+      data: new Date(),
     });
   }
 
@@ -46,6 +51,17 @@ export class Avaliacao {
   }
 
   public get data() {
-    return this.props.criadoEm;
+    return this.props.data;
+  }
+
+  public toJSON() {
+    return {
+      id: this.id,
+      livro_id: this.livro_id,
+      usuario_id: this.usuario_id,
+      nota: this.nota,
+      comentario: this.comentario,
+      data: this.data,
+    };
   }
 }
