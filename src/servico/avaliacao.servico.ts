@@ -14,7 +14,7 @@ export class AvaliacaoServico {
       return await this.avaliacaoDAO.criar(dados);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        throw new Error(error.message); // já propaga a mensagem "Livro não encontrado"
+        throw new Error(error.message);
       }
       throw new Error('Erro inesperado ao criar avaliação');
     }

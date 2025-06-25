@@ -17,6 +17,5 @@ export class LivroApi {
   private addRotas(): void {
     this.api.addRota('/livros/busca', 'GET', this.livroControle.buscar.bind(this.livroControle));
     this.api.addRota('/livros', 'POST', this.livroControle.criar.bind(this.livroControle));
-    this.api.addRota('/livros/ordenados', 'GET', this.livroControle.listar.bind(this.livroControle));
   }
 }
