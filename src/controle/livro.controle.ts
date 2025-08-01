@@ -15,25 +15,24 @@ export class LivroControle {
     }
   }
 
-async buscar(req: Request, res: Response): Promise<void> {
-  try {
-    const q = req.query.q;
+  async buscar(req: Request, res: Response): Promise<void> {
+    try {
+      const q = req.query.q;
 
-    if (!q || typeof q !== 'string' || q.trim() === '') {
-      res.status(400).json({ erro: 'Parâmetro de busca inválido' });
-      return;
+      if (!q || typeof q !== 'string' || q.trim() === '') {
+        res.status(400).json({ erro: 'Parâmetro de busca inválido' });
+        return;
+      }
+
+      const livros = await this.livroServico.buscarPorTituloOuAutor(q.trim());
+      res.json(livros);
+    } catch (error: any) {
+      console.error('Erro ao buscar livros:', error);
+      res.status(500).json({ erro: error.message || 'Erro ao buscar livros' });
     }
-
-    const livros = await this.livroServico.buscarPorTituloOuAutor(q.trim());
-    res.json(livros);
-  } catch (error: any) {
-    console.error('Erro ao buscar livros:', error);
-    res.status(500).json({ erro: error.message || 'Erro ao buscar livros' });
   }
-}
 
-
-  async listar(req: Request, res: Response): Promise<void> {
+  async listarOrdenadosPorNota(req: Request, res: Response): Promise<void> {
     try {
       const livros = await this.livroServico.listarLivrosOrdenadosPorNota();
       res.json(livros);
@@ -41,4 +40,25 @@ async buscar(req: Request, res: Response): Promise<void> {
       res.status(400).json({ erro: error.message || 'Erro ao listar livros' });
     }
   }
+
+  async calcularMedia(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const media = await this.livroServico.calcularMediaNotas(id);
+    res.status(200).json({ media });
+  } catch (error: any) {
+    res.status(500).json({ erro: error.message || 'Erro ao calcular média do livro.' });
+  }
+}
+
+async listarTodos(req: Request, res: Response): Promise<void> {
+  try {
+    const livros = await this.livroServico.listarTodos();
+    res.status(200).json(livros);
+  } catch (error: any) {
+    res.status(500).json({ erro: error.message || 'Erro ao listar livros' });
+  }
+}
+
+
 }

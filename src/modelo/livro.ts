@@ -10,6 +10,18 @@ export class Livro {
   private constructor(private readonly props: LivroProps) {}
 
   public static build({ titulo, autor, descricao, ano }: Omit<LivroProps, 'id'>): Livro {
+    const anoAtual = new Date().getFullYear();
+
+    if (ano !== undefined) {
+      if (ano <= 0) {
+        throw new Error('O ano deve ser maior que zero');
+      }
+
+      if (ano > anoAtual) {
+        throw new Error('O ano não pode ser maior que o ano atual');
+      }
+    }
+
     return new Livro({
       id: crypto.randomUUID().toString(),
       titulo,

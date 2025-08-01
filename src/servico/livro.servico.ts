@@ -12,9 +12,16 @@ export class LivroServico {
   ) {}
 
   async criarLivro(dados: LivroCreateDTO): Promise<Livro> {
-    const livro = Livro.build(dados);
-    return await this.livroDAO.criarLivro(livro);
+  const anoAtual = new Date().getFullYear();
+
+  if (dados.ano && dados.ano > anoAtual) {
+    throw new Error('O ano do livro não pode ser maior que o ano atual');
   }
+
+  const livro = Livro.build(dados);
+  return await this.livroDAO.criarLivro(livro);
+}
+
 
   async buscarPorTituloOuAutor(busca: string): Promise<LivroReadDTO[]> {
     const livros = await this.livroDAO.buscarPorTituloOuAutor(busca);
@@ -60,4 +67,25 @@ export class LivroServico {
     const media = await this.avaliacaoDAO.calcularMedia(livroId);
     return Number(media);
   }
+
+  async listarTodos(): Promise<LivroReadDTO[]> {
+  const livros = await this.livroDAO.listarTodos();
+
+  const livrosComMedia: LivroReadDTO[] = await Promise.all(
+    livros.map(async (livro) => {
+      const media = await this.avaliacaoDAO.calcularMedia(livro.id);
+      return {
+        id: livro.id,
+        titulo: livro.titulo,
+        autor: livro.autor,
+        descricao: livro.descricao,
+        ano: livro.ano,
+        mediaNota: Number(media)
+      };
+    })
+  );
+
+  return livrosComMedia;
+}
+
 }
